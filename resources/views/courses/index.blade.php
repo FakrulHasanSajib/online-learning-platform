@@ -1,29 +1,15 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            All Courses
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        @foreach ($courses as $course)
-                            <div class="p-4 border rounded-lg">
-                                <h3 class="text-lg font-bold">{{ $course->title }}</h3>
-                                <p class="text-sm text-gray-600">By: {{ $course->teacher->name }}</p>
-                                <p class="mt-2">{{ Str::limit($course->description, 100) }}</p>
-                                <a href="{{ route('courses.show', $course) }}" class="inline-block mt-4 text-indigo-600 hover:text-indigo-900">View Course</a>
-                            </div>
-                        @endforeach
-                    </div>
-                    <div class="mt-6">
-                        {{ $courses->links() }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</x-app-layout>
+@extends('layouts.app')
+@section('content')
+<h2>📚 Courses</h2>
+<div class="row">
+@foreach($courses as $c)
+ <div class="col-md-4 mb-3">
+   <div class="card p-3">
+     <h5>{{$c->title}}</h5>
+     <p class="text-muted">By {{$c->teacher->name}}</p>
+     <a href="{{route('courses.show',$c)}}" class="btn btn-sm btn-primary">View</a>
+   </div>
+ </div>
+@endforeach
+</div>
+@endsection

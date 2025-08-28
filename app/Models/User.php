@@ -21,23 +21,6 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function courses()
-    {
-        return $this->hasMany(Course::class);
-    } // As a teacher
-
-    public function enrollments()
-    {
-        return $this->belongsToMany(Course::class, 'course_user')->withTimestamps();
-    } // As a student
-
-    public function completedLessons()
-    {
-        return $this->belongsToMany(Lesson::class, 'lesson_user')->withTimestamps();
-    }
-
-    public function hasCompleted(Lesson $lesson)
-    {
-        return $this->completedLessons->contains($lesson);
-    }
+   public function courses(){ return $this->hasMany(Course::class); }   // as teacher
+public function enrollments(){ return $this->belongsToMany(Course::class,'course_user'); } // as student
 }

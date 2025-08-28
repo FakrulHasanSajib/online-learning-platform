@@ -5,14 +5,13 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up(): void {
-        Schema::create('courses', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Teacher's ID
-            $table->string('title');
-            $table->text('description');
-            $table->string('cover_image')->nullable(); // Course thumbnail/cover
-            $table->timestamps();
-        });
+       Schema::create('courses', function(Blueprint $t){
+    $t->id();
+    $t->foreignId('user_id')->constrained('users')->onDelete('cascade'); // teacher
+    $t->string('title');
+    $t->text('description');
+    $t->timestamps();
+});
     }
     public function down(): void { Schema::dropIfExists('courses'); }
 };
