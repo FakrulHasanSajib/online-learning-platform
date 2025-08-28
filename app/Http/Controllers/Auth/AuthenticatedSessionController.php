@@ -8,6 +8,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Providers\RouteServiceProvider;
+
+
 
 class AuthenticatedSessionController extends Controller
 {
@@ -22,14 +25,24 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
-    {
-        $request->authenticate();
+  public function store(LoginRequest $request): RedirectResponse
+{
+    $request->authenticate();
 
-        $request->session()->regenerate();
+    $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+    // Check the authenticated user's role and redirect accordingly
+    if (auth()->user()->role === 'teacher') {
+        return redirect()->intended(route('teacher.dashboard'));
     }
+
+    if (auth()->user()->role === 'student') {
+        return redirect()->intended(route('student.dashboard'));
+    }
+
+    // Default redirect for other roles or as a fallback
+    return redirect()->intended(RouteServiceProvider::HOME);
+}
 
     /**
      * Destroy an authenticated session.

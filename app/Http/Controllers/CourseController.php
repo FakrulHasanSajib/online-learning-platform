@@ -1,64 +1,23 @@
 <?php
-
 namespace App\Http\Controllers;
-
+use App\Models\Course;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class CourseController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+class CourseController extends Controller {
+    public function index() {
+        $courses = Course::with('teacher')->latest()->paginate(9);
+        return view('courses.index', compact('courses'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function create() { return view('teacher.courses.create'); }
+    public function store(Request $request) {
+        $request->validate(['title' => 'required|max:255', 'description' => 'required']);
+        Auth::user()->courses()->create($request->all());
+        return redirect()->route('dashboard')->with('success', 'Course created successfully!');
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function show(Course $course) {
+        $isEnrolled = Auth::check() ? Auth::user()->enrollments->contains($course) : false;
+        return view('courses.show', compact('course', 'isEnrolled'));
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+    // edit and update methods can be added similarly
 }
